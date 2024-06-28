@@ -1,22 +1,18 @@
 import { useState } from "react"
-// função padrão fora das chaves e as outras que quero importar dentro
 import HelloWorld from "./components/HelloWorld"
 import NumeroAleatorio from "./components/NumeroAleatorio"
+import Formulario from './components/Formulario'
+import Lista from './components/Lista'
 
 const App = () => {
   return (
-    <>
+    <main className='container'>
       <HelloWorld name="Lucas" />
       <NumeroAleatorio />
-    </>
+      <Formulario/>
+      <Lista/>
+    </main>
   )
 }
-
-//Com vetores, a ordem (posição do índice) importa, mas o nome dado não
-// const [nome, idade] = ['Lucas', 18]
-
-//Já com objetos, a ordem não importa, mas devo respeitar o mesmo nome
-// const pessoa = { nome: 'Lucas', idade: 18 }
-// const {nome, idade} = pessoa
 
 export default App
