@@ -7,8 +7,17 @@ const Lista = () => {
 
   const addFruta = e => {
     e.preventDefault()
-    setFrutas([...frutas, fruta])
+    
+    const index = frutas.findIndex(f => f > fruta)
+    let f = [...frutas]
+    f.splice(index < 0 ? f.length : f, 0 , fruta)
+    setFrutas(f)
+
     setFruta('')
+  }
+
+  const removerFruta = () => {
+
   }
 
   return (
