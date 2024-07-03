@@ -40,7 +40,7 @@ const NumeroAleatorio = () => {
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={1.5}
-          stroke="currentColor"
+          stroke="green"
           className="size-4">
           <path
             strokeLinecap="round"
@@ -56,7 +56,7 @@ const NumeroAleatorio = () => {
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={1.5}
-          stroke="currentColor"
+          stroke="deepskyblue"
           className="size-6">
           <path
             strokeLinecap="round"
@@ -73,7 +73,7 @@ const NumeroAleatorio = () => {
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={1.5}
-          stroke="currentColor"
+        stroke="crimson"
           className="size-6">
           <path
             strokeLinecap="round"

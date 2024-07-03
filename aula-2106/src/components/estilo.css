@@ -47,3 +47,8 @@ button>svg{
     gap: 2rem;
     align-items: center;
 }
+
+li{
+    display: flex;
+    justify-content: space-between;
+}
