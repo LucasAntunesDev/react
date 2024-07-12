@@ -21,7 +21,7 @@ function App() {
         <Estados estado={estado} setEstado={handleEstado}  />
         <Cidades uf={estado} cidade={cidade} setCidade={setCidade} />
 
-        <h2>Você selecionou {estado}</h2>
+        <h2>{estado !== '-1' ? 'Você selecionou: ' + estado : ''}</h2>
       </main>
     </>
   )

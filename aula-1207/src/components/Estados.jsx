@@ -23,8 +23,6 @@ const Estados = ({estado, setEstado}) => {
     carregaEstados()
   }, [])
 
-  //   if (loading) return <p>Aguarde...</p>
-
   return (
     <>
       <select
