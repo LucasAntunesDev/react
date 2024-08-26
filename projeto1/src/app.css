@@ -1,0 +1,35 @@
+.conatiner{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+}
+
+button.incrementar {
+    background: #10b981;
+    color: #065f46;
+}
+
+button.incrementar:disabled {
+    background: rgba(16, 185, 129, 0.5);
+}
+
+button.decrementar {
+    background: #ef4444;
+    color: #fee2e2;
+}
+
+button.decrementar:disabled {
+    background: rgba(239, 68, 68, 0.5);
+    color: #b91c1c;
+}
+
+div.btn-conatiner {
+    display: flex;
+    gap: 1rem;
+}
+
+p{
+    max-width: 80%;
+}
