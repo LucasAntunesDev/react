@@ -40,3 +40,14 @@
 .read-the-docs {
   color: #888;
 }
+
+button:hover{
+  background: rgb(0, 88, 66);
+  color: white;
+}
+
+button:disabled{
+  background: crimson;
+  color: #2525;
+  cursor: not-allowed;
+}
