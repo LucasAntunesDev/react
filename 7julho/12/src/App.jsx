@@ -18,10 +18,10 @@ function App() {
       </h1>
 
       <main className="flex flex-col justify-center items-center w-fit bg-blue-50 p-40 rounded-xl shadow-md shadow-slate-100 gap-y-2">
-        <Estados estado={estado} setEstado={handleEstado}  />
+        <Estados estado={estado} setEstado={handleEstado} />
         <Cidades uf={estado} cidade={cidade} setCidade={setCidade} />
 
-        <h2>{estado !== '-1' ? 'Você selecionou: ' + estado : ''}</h2>
+        <h2>{estado !== '-1' ? `Você selecionou: ${cidade} - ${estado}`  : ''}</h2>
       </main>
     </>
   )
