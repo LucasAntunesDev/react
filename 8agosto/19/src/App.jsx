@@ -1,11 +1,7 @@
-import {useState} from 'react'
+import {useState, useEffect, useMemo} from 'react'
 
 import './App.css'
 
-//Função para não precisar chamar preventDefault()
-//em vários formulários na aplicação.
-//Dá pra adaptar pra usar outra função também, como validação de formulários.
-//Em linhas gerais, já resolve algumas regras nela, evitando repetição de código
 const onSubmit = callBack => {
   return event => {
     event.preventDefault()
@@ -13,17 +9,14 @@ const onSubmit = callBack => {
   }
 }
 
-//todos os atributos de uma tag react são, na verdade, parte de um objeto javascript.
-//é por isso que usamos props.propiedade para acessá-la ou, então,
-//desestrututamos ela
 const Header = ({add}) => {
   const [nome, setNome] = useState('')
 
   const handleSubmit = () => {
     if (nome === '') return
-    //o que usuário digitar será colocado no array
+
     add(nome)
-    //limpa o valor do input
+
     setNome('')
   }
 
@@ -57,20 +50,40 @@ const Content = ({state}) => {
 }
 
 const App = () => {
-  const [state, setState] = useState([])
-  //recebe um valor e altera um estado do que está dentro do contructor
-  //três pontos => cria uma cópia de state,
-  //valor a a "cópia" são inseridos em state
+  const localState = JSON.parse(localStorage.getItem('state'))
+
+  const [state, setState] = useState(localState || [])
+
   const add = valor => setState([...state, valor])
+
+  const limpar = () => {
+    localStorage.clear()
+    setState([])
+  }
+
+  //tem que ter return
+  //executa e retorna um valor sempre que a dependencia mudar
+  //evita que haja calculos toda hora
+  const tamanho = useMemo(() => {
+    return state.length
+  }, [state])
+
+  //quando a dependencia é mudada, a função é executada novamente,
+  //ou seja, ele 'assiste' a variável
+  useEffect(() => {
+    localStorage.setItem('state', JSON.stringify(state))
+  }, [state])
 
   return (
     <>
-      {/* header é responsável por adicionar informações */}
       <Header add={add} />
-      <aside></aside>
-      {/* header é responsável por mostrar informações */}
+      <aside>{tamanho}</aside>
       <Content state={state} />
-      <footer></footer>
+      <footer>
+        <button type="button" onClick={limpar}>
+          Limpar
+        </button>
+      </footer>
     </>
   )
 }
