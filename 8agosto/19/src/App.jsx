@@ -1,9 +1,9 @@
 import {useEffect, useMemo, useState} from 'react'
-import { useAuth } from './Context'
+import {useAuth} from './Context'
 import './App.css'
 
-const onSubmit = (cb) => {
-  return (e) => {
+const onSubmit = cb => {
+  return e => {
     e.preventDefault()
     cb()
   }
@@ -11,7 +11,7 @@ const onSubmit = (cb) => {
 
 const Header = ({add}) => {
   const [x, {incrementar}] = useAuth()
-  const [nome, setNome] = useState("")
+  const [nome, setNome] = useState('')
   const handleSubmit = () => {
     incrementar()
     // if (nome === "") return;
@@ -23,12 +23,11 @@ const Header = ({add}) => {
       {x}
       <form onSubmit={onSubmit(handleSubmit)}>
         <input
-         
-          name="nome" 
-          type="text" 
-          value={nome} 
-          onChange={({target})=>setNome(target.value)}
-        /> 
+          name="nome"
+          type="text"
+          value={nome}
+          onChange={({target}) => setNome(target.value)}
+        />
         <button>Adicionar</button>
       </form>
     </header>
@@ -41,9 +40,9 @@ const Content = ({state}) => {
     <main>
       {x}
       <ul>
-      {state.map((o,idx) => (
-        <li key={idx}>{o}</li>
-      ))}
+        {state.map((o, idx) => (
+          <li key={idx}>{o}</li>
+        ))}
       </ul>
     </main>
   )
@@ -53,9 +52,11 @@ function App() {
   const localState = JSON.parse(localStorage.getItem('state'))
   const [state, setState] = useState(localState || [])
 
-  const add = (v) => setState([...state, v])
+  const [estado, setEstado] = useState(null)
 
-  const limpar = () =>{
+  const add = v => setState([...state, v])
+
+  const limpar = () => {
     localStorage.clear()
     setState([])
   }
@@ -69,11 +70,13 @@ function App() {
 
   return (
     <>
-      <Header add={add}/>
+      <Header add={add} />
       <aside>{tamanho}</aside>
-      <Content state={state}/>
+      <Content state={state} />
       <footer>
-        <button type="button" onClick={limpar}>Limpar</button>
+        <button type="button" onClick={limpar}>
+          Limpar
+        </button>
       </footer>
     </>
   )
