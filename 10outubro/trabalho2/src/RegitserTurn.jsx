@@ -1,205 +1,135 @@
 import {useForm} from 'react-hook-form'
-import {useState, useEffect} from 'react'
-
+import {useState} from 'react'
 import {fromatDates} from './utils/formatDates'
 
+const DAYS_OF_WEEK = [
+  {name: 'SEGUNDA', label: 'Segunda-feira'},
+  {name: 'TERCA', label: 'Terça-feira'},
+  {name: 'QUARTA', label: 'Quarta-feira'},
+  {name: 'QUINTA', label: 'Quinta-feira'},
+  {name: 'SEXTA', label: 'Sexta-feira'},
+  {name: 'SABADO', label: 'Sábado'},
+  {name: 'DOMINGO', label: 'Domingo'},
+]
+
+const DAY_NAMES_PT = [
+  'SEGUNDA',
+  'TERCA',
+  'QUARTA',
+  'QUINTA',
+  'SEXTA',
+  'SABADO',
+  'DOMINGO',
+]
+
 const RegisterTurn = () => {
-  const {register, handleSubmit, reset} = useForm()
-
+  const {register, handleSubmit, reset, setValue} = useForm()
   const [turns, setTurns] = useState([])
-
-  const [editingTurn, setEditingTurn] = useState(null)
+  const [editingIndex, setEditingIndex] = useState(null)
 
   const onSubmit = data => {
-    const daysOfTheWeek = [
-      'monday',
-      'tuesday',
-      'wednesday',
-      'thursday',
-      'friday',
-      'saturday',
-      'sunday',
-    ]
-    const daysNames = [
-      'SEGUNDA',
-      'TERCA',
-      'QUARTA',
-      'QUINTA',
-      'SEXTA',
-      'SABADO',
-      'DOMINGO',
-    ]
+    const selectedDays = DAYS_OF_WEEK.map((day, index) =>
+      data[day.name] ? DAY_NAMES_PT[index] : null
+    ).filter(Boolean)
 
-    const selectedDays = daysOfTheWeek
-      .map((day, index) => (data[day] ? daysNames[index] : null))
-      .filter(Boolean)
+    const newTurn = {
+      inicio: data.start,
+      fim: data.end,
+      dias: selectedDays,
+    }
 
-    const array = [
-      {
-        inicio: data.start,
-        fim: data.end,
-        dias: selectedDays,
-      },
-    ]
-    const newTurn = fromatDates(array)
-
-    // Se estiver editando, atualiza o turno, senão, adiciona um novo
-    if (editingTurn !== null) {
+    if (editingIndex !== null) {
       const updatedTurns = [...turns]
-      updatedTurns[editingTurn] = newTurn[0]
+      updatedTurns[editingIndex] = newTurn
       setTurns(updatedTurns)
-      setEditingTurn(null) // Reseta o modo de edição
+      setEditingIndex(null)
     } else {
-      setTurns(prevTurns => [...prevTurns, ...newTurn])
+      setTurns(prevTurns => [...prevTurns, newTurn])
     }
 
+    resetForm()
+  }
+
+  const resetForm = () => {
     reset()
+    setEditingIndex(null)
   }
 
-  const removeTurn = turn => {
-    const index = turns.findIndex(c => c === turn)
-    if (index !== -1) {
-      const updatedTurns = [...turns]
-      updatedTurns.splice(index, 1)
-      setTurns(updatedTurns)
-    }
+  const removeTurn = index => {
+    setTurns(turns.filter((_, i) => i !== index))
   }
 
-  const editTurn = turn => {
-    const index = turns.findIndex(c => c === turn)
-    if (index !== -1) {
-      setEditingTurn(index) // Define o índice do turno que está sendo editado
+  const editTurn = index => {
+    const turn = turns[index]
+    setEditingIndex(index)
 
-      // Preenche os valores do formulário com os valores do turno selecionado
-      setValue('start', turn.inicio)
-      setValue('end', turn.fim)
+    setValue('start', turn.inicio)
+    setValue('end', turn.fim)
 
-      const daysOfTheWeek = [
-        'monday',
-        'tuesday',
-        'wednesday',
-        'thursday',
-        'friday',
-        'saturday',
-        'sunday',
-      ]
-      const daysNames = [
-        'SEGUNDA',
-        'TERCA',
-        'QUARTA',
-        'QUINTA',
-        'SEXTA',
-        'SABADO',
-        'DOMINGO',
-      ]
-
-      daysOfTheWeek.forEach((day, index) => {
-        setValue(day, turn.dias.includes(daysNames[index]))
-      })
-    }
+    DAYS_OF_WEEK.forEach((day, i) => {
+      setValue(day.name, turn.dias.includes(DAY_NAMES_PT[i]) || false)
+    })
   }
 
   return (
-    <>
-      <h1>Cadastrar turno</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label htmlFor="start">Início</label>
-          <input type="time" id="start" {...register('start')} />
-        </div>
-        <div>
-          <label htmlFor="end">Fim</label>
-          <input type="time" id="end" {...register('end')} />
-        </div>
+    <section className="container">
+      <div>
+        <h1>Cadastrar turno</h1>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div>
+            <label htmlFor="start">Início</label>
+            <input
+              type="time"
+              id="start"
+              {...register('start', {required: true})}
+            />
+          </div>
+          <div>
+            <label htmlFor="end">Fim</label>
+            <input
+              type="time"
+              id="end"
+              {...register('end', {required: true})}
+            />
+          </div>
 
-        <div>
           <div>
-            <input
-              type="checkbox"
-              name="monday"
-              id="monday"
-              {...register('monday')}
-            />
-            <label htmlFor="monday">Segunda-feira</label>
+            {DAYS_OF_WEEK.map(day => (
+              <div key={day.name}>
+                <input type="checkbox" id={day.name} {...register(day.name)} />
+                <label htmlFor={day.name}>{day.label}</label>
+              </div>
+            ))}
           </div>
-          <div>
-            <input
-              type="checkbox"
-              name="tuesday"
-              id="tuesday"
-              {...register('tuesday')}
-            />
-            <label htmlFor="tuesday">Terça-feira</label>
-          </div>
-          <div>
-            <input
-              type="checkbox"
-              name="wednesday"
-              id="wednesday"
-              {...register('wednesday')}
-            />
-            <label htmlFor="wednesday">Quarta-feira</label>
-          </div>
-          <div>
-            <input
-              type="checkbox"
-              name="thursday"
-              id="thursday"
-              {...register('thursday')}
-            />
-            <label htmlFor="thursday">Quinta-feira</label>
-          </div>
-          <div>
-            <input
-              type="checkbox"
-              name="friday"
-              id="friday"
-              {...register('friday')}
-            />
-            <label htmlFor="friday">Sexta-feira</label>
-          </div>
-          <div>
-            <input
-              type="checkbox"
-              name="saturday"
-              id="saturday"
-              {...register('saturday')}
-            />
-            <label htmlFor="saturday">Sábado</label>
-          </div>
-          <div>
-            <input
-              type="checkbox"
-              name="sunday"
-              id="sunday"
-              {...register('sunday')}
-            />
-            <label htmlFor="sunday">Domingo</label>
-          </div>
-        </div>
 
-        <button type="submit">Salvar</button>
-      </form>
+          <button type="submit">
+            {editingIndex !== null ? 'Atualizar' : 'Salvar'}
+          </button>
+          {editingIndex !== null && (
+            <button type="button" onClick={resetForm}>
+              Cancelar Edição
+            </button>
+          )}
+        </form>
+      </div>
 
       <div>
-        <h2>Turnos cadastrados:</h2>
+        <h2>Turnos</h2>
         <ul>
           {turns.map((turn, index) => (
             <li key={index}>
-              <span>
-                {turn.inicio} - {turn.fim} ({turn.dias.join(', ')})
-              </span>
-              <button type="button" onClick={() => editTurn(turn)}>
+              <span>{fromatDates([turn])[0]}</span>
+              <button type="button" onClick={() => editTurn(index)}>
                 Editar
               </button>
-              <button type="button" onClick={() => removeTurn(turn)}>
+              <button type="button" onClick={() => removeTurn(index)}>
                 Remover
               </button>
             </li>
           ))}
         </ul>
       </div>
-    </>
+    </section>
   )
 }
 

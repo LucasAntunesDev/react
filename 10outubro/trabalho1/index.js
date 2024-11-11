@@ -52,6 +52,4 @@ const horariosFormatados = listaHorariosMap
   .map(horario => `<p>${horario}</p>`)
   .join('')
 
-document.querySelector(
-  '#horarios'
-).innerHTML = `<p style="text-transform: capitalize;">${dadosFormatados}</p>`
+document.querySelector('#horarios').innerHTML = `<p>${dadosFormatados}</p>`
